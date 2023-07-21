@@ -1,0 +1,30 @@
+<!DOCTYPE HTML> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head> 
+	<head>
+    	<title>Gauge Test</title>
+    </head>
+	<meta http-equiv="content-type"
+		content="application/xhtml+xml; charset=utf-8"/>
+	<body bgcolor="#FFFFFF">
+		<script src="radar.js"></script>
+		<svg id="radar" width="1px" height="1px"></svg>
+		<script>
+			var svg = svgen("svg", { width:640, height:480, id:"radar" });
+			var element = document.getElementById('radar');
+
+			// Example radar chart
+			const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+			const temps = [[15.3, 18.4, 20.0, 26.1, 30.4, 33.3, 34.4, 33.3, 30.0, 25.0, 23.3, 15.0],
+			               [14.3, 25.6, 29.5, 33.5, 41.1, 41.1, 41.9, 39.3, 35.0, 31.0, 23.3, 19.5],
+			               [34.4, 32.8, 34.4, 37.7, 38.9, 38.9, 35.5, 36.1, 40.0, 40.0, 36.6, 34.4]];
+			const lineColors = ["#007700", "#007700", "#007700"];
+			const fillColors = ["#770000", "#007700", "#000077"];
+			const fillOpacity = [0.2, 0.4, 0.2];
+
+			createRadarChart(svg, months, temps, lineColors, fillColors, fillOpacity);
+			element.parentNode.replaceChild(svg, element);
+		</script>
+	</body>
+</html>
+
+
