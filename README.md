@@ -16,4 +16,5 @@ Only one common scale is permitted.
 
 Example:
 
+![image](https://github.com/dslik/svg-radar/assets/5757591/ff4c72b8-cd3a-4952-b255-db7b12502e72)
 
