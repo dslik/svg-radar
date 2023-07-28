@@ -1,20 +1,31 @@
 SVG Radar Charts
 ================
 
+Simple [radar charts](https://en.wikipedia.org/wiki/Radar_chart#See_also) using SVG, specifically for the visualization of climate data.
+
 Notice: This library is still in an early state of development.
 
-Simple [radar charts](https://en.wikipedia.org/wiki/Radar_chart#See_also) using SVG
+### Goals
 
 Core functionality includes:
-
 * Multiple variables
 * Multiple series
 * Translucent fill areas
 * Concentric circles as grid lines
 
-Only one common scale is permitted.
+Future plans:
+* Spiral series with value as line segment colour
+* Displaying series values
 
-Example:
+Limitations:
+* Only one common scale will be permitted
 
-![image](https://github.com/dslik/svg-radar/assets/5757591/ff4c72b8-cd3a-4952-b255-db7b12502e72)
+### Example
 
+![image](https://github.com/dslik/svg-radar/assets/5757591/b7b7539d-aff4-4e2c-913e-0ec74f4ff383)
+
+### Progress Log
+
+2023-07-28
+- Refactored to use classes
+- Added support for multiple label styles
