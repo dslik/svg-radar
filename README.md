@@ -20,12 +20,21 @@ Future plans:
 Limitations:
 * Only one common scale will be permitted
 
-### Example
+# Progress Log
 
-![image](https://github.com/dslik/svg-radar/assets/5757591/b7b7539d-aff4-4e2c-913e-0ec74f4ff383)
+## 2023-08-05
 
-### Progress Log
+Struggling with correctly offset-centring SVG gradients in an irregular object. At this point, I think this can only be accomplished by using matrix math to shift and scale the gradient, but that's going to be a significant amount of complexity.
 
-2023-07-28
+This is a shame, since using radial gradients are useful for illustrating temperature ranges.
+
+Here's what the work-in-progress looks like showing record high and low temperatures, and the monthly averages for min/max/average:
+
+![image](https://github.com/dslik/svg-radar/assets/5757591/a7e6b5d6-4291-4020-b927-b9e49139a0e7)
+
+
+## 2023-07-28
 - Refactored to use classes
 - Added support for multiple label styles
+
+![image](https://github.com/dslik/svg-radar/assets/5757591/b7b7539d-aff4-4e2c-913e-0ec74f4ff383)
