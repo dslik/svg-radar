@@ -14,14 +14,20 @@
 
 			// Example radar chart
 			const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-			const temps1 = [15.3, 8.4, 20.0, 26.1, 30.4, 33.3, 34.4, 33.3, 30.0, 25.0, 23.3, 15.0];
-			const temps2 = [14.3, 25.6, 29.5, 33.5, 41.1, 41.1, 41.9, 39.3, 35.0, 31.0, 23.3, 19.5];
-			const temps3 = [34.4, 32.8, 34.4, 37.7, 38.9, 38.9, 35.5, 36.1, 40.0, 40.0, 36.6, 34.4];
+			const hh = [15.3, 18.4, 20.0, 26.1, 30.4, 33.3, 34.4, 33.3, 30.0, 25.0, 23.3, 15.0];
+			const ahigh = [6.9, 8.2, 10.3, 13.2, 16.7, 19.6, 22.2, 22.2, 18.9, 13.5, 9.2, 6.3];
+			const mean = [4.1, 4.9, 6.9, 9.4, 12.8, 15.7, 18.0, 18.0, 14.9, 10.3, 6.3, 3.6];
+			const alow = [1.4, 1.6, 3.4, 5.6, 8.8, 11.7, 13.7, 13.8, 10.8, 7.0, 3.5, 0.8];
+			const ll = [-17.8, -16.1, -9.4, -3.3, 0.6, 3.9, 6.1, 3.9, -1.1, -6.1, -14.3, -17.8];
 
-			var chart = new radarChart(svg, new radarCategories(months, "classic"));
-			chart.addSeries(new radarSeries("Place 1", temps1, "#770000", 0.2));
-			chart.addSeries(new radarSeries("Place 2", temps2, "#007700", 0.4));
-			chart.addSeries(new radarSeries("Place 3", temps3, "#000077", 0.2));
+			var chart = new radarChart(svg, new radarCategories(months, "classic"), 40);
+			chart.addSeries(new radarSeries("Place 1", hh, "url(#temp)", 0.5, "outer"));
+			chart.addSeries(new radarSeries("Place 2", ahigh, "url(#temp)", 1.0));
+			chart.addSeries(new radarSeries("Place 2", mean, "url(#temp)", 1.0));
+			chart.addSeries(new radarSeries("Place 3", alow, "#FFFFFF", 1.0));
+			chart.addSeries(new radarSeries("Place 3", alow, "url(#temp)", 0.5));
+			chart.addSeries(new radarSeries("Place 3", ll, "#FFFFFF", 1.0));
+			chart.addSeries(new radarSeries("Place 3", ll, "#FFFFFF", 0.0, "inner"));
 
 			chart.render();
 			element.parentNode.replaceChild(svg, element);

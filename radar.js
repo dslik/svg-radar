@@ -7,11 +7,12 @@
 "use strict";
 
 class radarSeries {
-    constructor(name, yValues, colour = "#000000", opacity = 1.0) {
+    constructor(name, yValues, colour = "#000000", opacity = 1.0, displayLabels) {
         this.name = name;
         this.values = yValues;
         this.colour = colour;
         this.opacity = opacity;
+        this.displayLabels = displayLabels;
     }
 }
 
@@ -26,7 +27,7 @@ class radarCategories {
 }
 
 class radarChart {
-    constructor(svg, categories) {
+    constructor(svg, categories, negativeOffset = 0) {
         this.svg = svg;
 
         this.series = new Array();
@@ -34,6 +35,7 @@ class radarChart {
 
         this.numLabels = categories.labels.length;
 
+        this.negativeOffset = negativeOffset;
     }
 
     addSeries(series) {
@@ -68,18 +70,29 @@ class radarChart {
             seriesCounter = seriesCounter + 1;
         }
 
-        this.maxValue = values.sort(compareNums).reverse()[0];
-        this.minValue = values.sort(compareNums)[0];
+        this.maxValue = values.sort(compareNums).reverse()[0] + this.negativeOffset;
+        this.minValue = values.sort(compareNums)[0] + this.negativeOffset;
 
-        // Increase maxValue by 10% to allow space for values
-        this.maxValue = this.maxValue * 1.1;
+        // Increase maxValue by 20% to allow space for values
+        this.maxValue = this.maxValue * 1.2;
 
-        this.#drawOutline();
+        this.#drawDefs()
+        this.#drawUnderlay();
         this.#drawSeries();
         this.#drawCategories();
+        this.#drawOverlay();
     }
 
-    #drawOutline() {
+    #drawDefs() {
+        var defs = this.svg.appendChild(svgen("defs", {}));
+        var grad = defs.appendChild(svgen("radialGradient", {"id": "temp", cx: 0.5, cy: 0.5, r: 0.38, fx: 0.5, fy: 0.5 }));
+
+        grad.appendChild(svgen("stop", {"offset": "0%", "stop-color": "blue" }));
+        grad.appendChild(svgen("stop", {"offset": "50%", "stop-color": "white" }));
+        grad.appendChild(svgen("stop", {"offset": "100%", "stop-color": "red" }));
+    }
+
+    #drawUnderlay() {
         this.svg.appendChild(svgen("rect", { x: 0,
                                              y: 0,
                                              width: this.width,
@@ -93,6 +106,17 @@ class radarChart {
                                              height: this.size,
                                              stroke: '#000000',
                                              fill: '#FFFFFF' }));
+    }
+
+    #drawOverlay() {
+        if(this.negativeOffset != 0)
+        {
+            this.svg.appendChild(svgen("circle", { cx: this.centreX,
+                                                   cy: this.centreY,
+                                                   r: this.radius * this.negativeOffset / this.maxValue,
+                                                   stroke: "#000000",
+                                                   fill: "none" }));
+        }
     }
 
     #drawSeries() {
@@ -110,8 +134,33 @@ class radarChart {
             {
                 axisAngle = this.seriesAngle * axisCounter;
 
-                seriesRegion = seriesRegion + (this.centreX + (this.radius * (this.series[seriesCounter].values[axisCounter] / this.maxValue)) * Math.sin(axisAngle * Math.PI/180)) + ",";
-                seriesRegion = seriesRegion + (this.centreY - (this.radius * (this.series[seriesCounter].values[axisCounter] / this.maxValue)) * Math.cos(axisAngle * Math.PI/180)) + " ";
+                seriesRegion = seriesRegion + (this.centreX + (this.radius * ((this.series[seriesCounter].values[axisCounter] + this.negativeOffset) / this.maxValue)) * Math.sin(axisAngle * Math.PI/180)) + ",";
+                seriesRegion = seriesRegion + (this.centreY - (this.radius * ((this.series[seriesCounter].values[axisCounter] + this.negativeOffset) / this.maxValue)) * Math.cos(axisAngle * Math.PI/180)) + " ";
+
+                if(this.series[seriesCounter].displayLabels)
+                {
+                    var value = this.series[seriesCounter].values[axisCounter].toString();
+                    var offset = 0;
+                    var offsetAngle = 0;
+
+                    if(this.series[seriesCounter].displayLabels == "outer")
+                    {
+                        offset = 4;
+                        offsetAngle = 4;
+                    }
+
+                    if(this.series[seriesCounter].displayLabels == "inner")
+                    {
+                        offset = -12;
+                        offsetAngle = 8;
+                    }
+
+                    this.svg.appendChild(svgen('text', { x: this.centreX + ((this.radius + offset * value.length) * ((this.series[seriesCounter].values[axisCounter] + this.negativeOffset) / this.maxValue)) * Math.sin((axisAngle + offsetAngle) * Math.PI/180), 
+                                                y: this.centreY - ((this.radius + offset * value.length) * ((this.series[seriesCounter].values[axisCounter] + this.negativeOffset) / this.maxValue)) * Math.cos((axisAngle + offsetAngle) * Math.PI/180) + 0.25 * this.categories.textPointSize,
+                                                "text-anchor": "middle",
+                                                "font-size": 12 },
+                                                value));
+                }
 
                 axisCounter = axisCounter + 1;
             }
